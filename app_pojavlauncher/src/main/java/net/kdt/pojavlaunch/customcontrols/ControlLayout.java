@@ -372,11 +372,7 @@ public class ControlLayout extends FrameLayout {
 		if (action == MotionEvent.ACTION_UP
 				|| action == MotionEvent.ACTION_CANCEL
 				|| action == MotionEvent.ACTION_POINTER_UP) {
-			// Only release swipeable buttons here — non-swipeable buttons
-			// release themselves in ControlButton.onTouchEvent on ACTION_UP.
-			if (lastControlButton != null && lastControlButton.getProperties().isSwipeable) {
-				lastControlButton.handleReleased();
-			}
+			if (lastControlButton != null) lastControlButton.handleReleased();
 			mapTable.put(v, null);
 			return;
 		}
@@ -390,25 +386,21 @@ public class ControlLayout extends FrameLayout {
 			}
 		}
 
-		//Release last button on swipe-out — only swipeable buttons, non-swipeable release themselves
-		if (lastControlButton != null && lastControlButton.getProperties().isSwipeable) {
-			lastControlButton.handleReleased();
-		}
+		//Release last keys
+		if (lastControlButton != null) lastControlButton.handleReleased();
 		mapTable.remove(v);
 
-		// Update the state of all buttons — swipeable ones get pressed by swipe-in,
-		// non-swipeable ones are just tracked so they can be released on swipe-out.
+		// Update the state of all swipeable buttons
 		for (ControlInterface button : getButtonChildren()) {
+			if (!button.getProperties().isSwipeable) continue;
 			if (eventInViewBounds(ev, button.getControlView())) {
+				//Press the new key
 				if (!button.equals(lastControlButton)) {
-					// Only press swipeable buttons on swipe-in;
-					// non-swipeable buttons handle their own press in ControlButton.
-					if (button.getProperties().isSwipeable) {
-						button.handlePressed();
-					}
+					button.handlePressed();
 					mapTable.put(v, button);
 					return;
 				}
+
 			}
 		}
 	}
