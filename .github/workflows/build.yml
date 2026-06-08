@@ -12,10 +12,7 @@ jobs:
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r26d
-      - name: Install CMake
-        run: |
-          sudo apt-get install -y cmake ninja-build
+          ndk-version: r29
       - name: Build APK
         run: |
           chmod +x gradlew
