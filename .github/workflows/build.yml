@@ -9,6 +9,10 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r26d
       - name: Build APK
         run: |
           chmod +x gradlew
