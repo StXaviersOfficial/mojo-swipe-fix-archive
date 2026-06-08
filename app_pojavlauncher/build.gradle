@@ -340,6 +340,7 @@ dependencies {
 
     implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
 
+    implementation project(":dnbglfw")
 
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 
