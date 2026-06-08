@@ -16,8 +16,9 @@ jobs:
       - name: Build APK
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --debug 2>&1 | grep -A5 "cmake.*non-zero\|CMake Error\|error:" | head -50
+          ./gradlew assembleDebug --debug 2>&1 | tee build.log | tail -20
+          find . -name "*.apk" 2>/dev/null
       - uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: app_pojavlauncher/build/outputs/apk/debug/*.apk
+          path: "**/*.apk"
