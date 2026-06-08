@@ -170,23 +170,28 @@ public class ControlButton extends TextView implements ControlInterface {
                 break;
         }
 
-        if(getProperties().isSwipeable) {
-            getControlLayoutParent().onTouch(this, event);
-            return true;
-        }
+        // Always forward to ControlLayout so it tracks this button in mapTable.
+        // This allows non-swipeable buttons to be properly released when the
+        // finger slides out onto a swipeable button — previously they stayed
+        // "stuck" because mapTable had no record of them being pressed.
+        getControlLayoutParent().onTouch(this, event);
 
-        switch (action){
-            case MotionEvent.ACTION_DOWN: // 0
-            case MotionEvent.ACTION_POINTER_DOWN: // 5
-                handlePressed();
-                break;
-            case MotionEvent.ACTION_UP: // 1
-            case MotionEvent.ACTION_CANCEL: // 3
-            case MotionEvent.ACTION_POINTER_UP: // 6
-                handleReleased();
-                break;
-            default:
-                return false;
+        if(!getProperties().isSwipeable) {
+            // Non-swipeable buttons still need to handle their own press/release
+            // for toggle, passThru etc. — ControlLayout only does swipeable ones.
+            switch (action){
+                case MotionEvent.ACTION_DOWN: // 0
+                case MotionEvent.ACTION_POINTER_DOWN: // 5
+                    handlePressed();
+                    break;
+                case MotionEvent.ACTION_UP: // 1
+                case MotionEvent.ACTION_CANCEL: // 3
+                case MotionEvent.ACTION_POINTER_UP: // 6
+                    handleReleased();
+                    break;
+                default:
+                    return false;
+            }
         }
 
         return super.onTouchEvent(event);
