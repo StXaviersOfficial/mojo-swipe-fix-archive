@@ -13,7 +13,7 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app_pojavlauncher/build/outputs/apk/debug/*.apk
