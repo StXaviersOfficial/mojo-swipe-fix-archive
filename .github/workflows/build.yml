@@ -16,12 +16,10 @@ jobs:
       - name: Build APK
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --debug 2>&1 | tee build.log | tail -5
-          echo "=== APK FILES ==="
-          find . -name "*.apk" 2>/dev/null
-          echo "=== END ==="
+          ./gradlew assembleDebug
+          find . -name "*.apk"
       - uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: "**/*.apk"
-          if-no-files-found: warn
+          if-no-files-found: error
