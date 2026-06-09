@@ -10,22 +10,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Setup Android NDK
+        id: setup-ndk
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r29
-      - name: Test cmake directly
-        run: |
-          cmake \
-            -S dnbglfw/src/main/cpp \
-            -B /tmp/cmake_test \
-            -DCMAKE_SYSTEM_NAME=Android \
-            -DCMAKE_SYSTEM_VERSION=21 \
-            -DANDROID_ABI=arm64-v8a \
-            -DANDROID_NDK=/opt/hostedtoolcache/ndk/r29/x64 \
-            -DCMAKE_TOOLCHAIN_FILE=/opt/hostedtoolcache/ndk/r29/x64/build/cmake/android.toolchain.cmake \
-            -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja \
-            -GNinja 2>&1 || true
       - name: Build APK
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
