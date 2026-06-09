@@ -16,10 +16,9 @@ jobs:
       - name: Build APK
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug
-          find . -name "*.apk"
+          ./gradlew assembleDebug --debug
       - uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: "**/*.apk"
+          path: app_pojavlauncher/build/outputs/apk/debug/*.apk
           if-no-files-found: error
