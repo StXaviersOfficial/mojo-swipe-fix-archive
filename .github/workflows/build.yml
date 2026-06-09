@@ -7,11 +7,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Remove preinstalled NDK and install ninja
+      - name: Setup environment
         run: |
           sudo rm -rf /usr/local/lib/android/sdk/ndk
           sudo apt-get install -y ninja-build
-          which ninja
+          sudo ln -sf /usr/bin/ninja /usr/local/bin/ninja
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -27,6 +27,7 @@ jobs:
           ANDROID_NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
           chmod +x gradlew
+          rm -rf ~/.gradle/caches
           ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
