@@ -9,7 +9,6 @@ jobs:
           submodules: recursive
       - name: Setup environment
         run: |
-          sudo rm -rf /usr/local/lib/android/sdk/ndk
           sudo apt-get install -y ninja-build
           sudo ln -sf /usr/bin/ninja /usr/local/bin/ninja
       - uses: actions/setup-java@v4
@@ -25,9 +24,9 @@ jobs:
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
           chmod +x gradlew
-          find . -name "*.cxx" -type d -exec rm -rf {} + 2>/dev/null || true
           ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
