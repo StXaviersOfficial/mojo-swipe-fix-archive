@@ -21,12 +21,10 @@ jobs:
         with:
           ndk-version: r29
       - name: Build APK
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-          ANDROID_NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
-          ANDROID_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
           chmod +x gradlew
+          echo "ndk.dir=${{ steps.setup-ndk.outputs.ndk-path }}" > local.properties
+          echo "sdk.dir=/usr/local/lib/android/sdk" >> local.properties
           ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
