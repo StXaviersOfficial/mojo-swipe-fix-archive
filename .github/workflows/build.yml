@@ -11,6 +11,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Remove preinstalled NDK
+        run: rm -rf /usr/local/lib/android/sdk/ndk
       - name: Setup Android NDK
         id: setup-ndk
         uses: nttld/setup-ndk@v1
